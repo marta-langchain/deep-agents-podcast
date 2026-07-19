@@ -9,26 +9,15 @@ a Tavily key until the tool is actually called.
 from langchain.tools import tool
 from tavily import TavilyClient
 
-_tavily = None
-
-
-def _client():
-    global _tavily
-    if _tavily is None:
-        _tavily = TavilyClient()  # reads TAVILY_API_KEY from the environment
-    return _tavily
-
-
-@tool(parse_docstring=True)
+@tool(description="Search the web for information on a given query.")
 def tavily_search(query: str) -> str:
-    """Search the web for information on a given query.
+    client = TavilyClient()
+    results = client.search(query, max_results=3)
 
-    Args:
-        query: Search query to execute.
-    """
-    results = _client().search(query, max_results=3, topic="general")
+    # Format the results into a readable string
     chunks = [
-        f"## {r['title']}\n**URL:** {r['url']}\n\n{r.get('content', '')}\n\n---\n"
+        f"## {r.get('title', 'Untitled')}\n**URL:** {r.get('url', '')}\n\n{r.get('content', '')}\n\n---\n"
         for r in results.get("results", [])
     ]
+
     return f"Found {len(chunks)} result(s) for '{query}':\n\n{''.join(chunks)}"

@@ -17,17 +17,12 @@ def _authors(result, limit=6):
     return head + (" et al." if len(names) > limit else "")
 
 
-@tool(parse_docstring=True)
+@tool(description=(
+    "Search arXiv for papers matching a query. Returns compact metadata (id, "
+    "title, authors, year, categories, trimmed abstract) — enough to decide "
+    "what's worth filing, without flooding context."
+))
 def search_arxiv(query: str, max_results: int = 5) -> str:
-    """Search arXiv for papers matching a query.
-
-    Returns compact metadata (id, title, authors, year, categories, trimmed
-    abstract) — enough to decide what's worth filing, without flooding context.
-
-    Args:
-        query: Search terms, e.g. "epigenetic aging clock biological age".
-        max_results: How many papers to return. Keep it small to save quota.
-    """
     search = arxiv.Search(
         query=query,
         max_results=max_results,
@@ -48,16 +43,12 @@ def search_arxiv(query: str, max_results: int = 5) -> str:
     return f"Found {len(blocks)} result(s) for {query!r}:\n\n" + "\n\n".join(blocks)
 
 
-@tool(parse_docstring=True)
+@tool(description=(
+    "Fetch full metadata for a single arXiv paper by id. Use this once you've "
+    "picked a paper from a search and need the details a citation requires — "
+    "full author list, DOI, journal reference, PDF link."
+))
 def get_arxiv_paper(arxiv_id: str) -> str:
-    """Fetch full metadata for a single arXiv paper by id.
-
-    Use this once you've picked a paper from a search and need the details a
-    citation requires — full author list, DOI, journal reference, PDF link.
-
-    Args:
-        arxiv_id: Short arXiv id, e.g. "2302.12345" or "2302.12345v2".
-    """
     results = list(_client.results(arxiv.Search(id_list=[arxiv_id])))
     if not results:
         return f"No arXiv paper found with id {arxiv_id!r}."

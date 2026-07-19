@@ -40,8 +40,11 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 _limiter = InMemoryRateLimiter(requests_per_second=0.2, check_every_n_seconds=0.1, max_bucket_size=3)
 
 # ---- Default: Gemini (Google AI Studio, free tier) ------------------------
-# disable_streaming=True forces the non-streaming `generateContent` endpoint
-# instead of `streamGenerateContent`.
+# temperature=0 so reruns give you the same answer — no surprises while
+# you're debugging.
+# disable_streaming=True works around a bug where streamed responses can
+# drop tool-call data; this agent calls tools constantly, so streaming
+# stays off.
 model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest", temperature=0, disable_streaming=True, rate_limiter=_limiter)
 sub_agent_model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest", temperature=0, disable_streaming=True, rate_limiter=_limiter)
 
