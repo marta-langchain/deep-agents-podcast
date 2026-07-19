@@ -27,32 +27,22 @@ Runs on the **free tier** of Google's Gemini API.
 
 ## Setup
 
-**1. Install dependencies** — install [uv](https://docs.astral.sh/uv/getting-started/installation/), then:
+**See [SETUP.md](SETUP.md) for the full guide** — two paths:
+
+- **Google Colab** (zero install) — open the notebook, add two free keys, run the setup cell.
+- **Your own machine** (uv) — clone, `uv sync`, fill `.env`, and you also get the live agent server.
+
+The short version for local:
 
 ```zsh
-uv sync
+uv sync                          # install (needs uv + Python 3.11–3.13)
+cp .env.example .env             # then fill in GOOGLE_API_KEY + TAVILY_API_KEY
+uv run python env_utils.py       # sanity-check
 ```
 
-**2. Configure environment**
-
-```zsh
-cp .env.example .env
-```
-
-Fill in `.env`. At minimum:
-
-- `GOOGLE_API_KEY` — free at [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
-- `TAVILY_API_KEY` — free at [tavily.com](https://tavily.com)
-
-Optional but recommended: `LANGSMITH_API_KEY` + `LANGSMITH_TRACING=true` for full
-trace observability — watch every run at [smith.langchain.com](https://smith.langchain.com)
-(free key from the same site).
-
-Sanity-check your setup:
-
-```zsh
-uv run python env_utils.py
-```
+Get free keys at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) (Gemini) and
+[tavily.com](https://tavily.com) (web search); optional `LANGSMITH_API_KEY` +
+`LANGSMITH_TRACING=true` for trace observability.
 
 > **Free-tier note.** The default model is `gemini-flash-lite-latest`, chosen for the
 > most generous free request budget (~15 req/min, ~1000/day per project). A deep
