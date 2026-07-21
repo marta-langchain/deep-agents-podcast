@@ -606,11 +606,32 @@ def trace_link(label="run"):
     with collect_runs() as cb:
         yield
     try:
-        from langsmith import Client
-
-        print(f"🔗 {label}: {Client().get_run_url(run=cb.traced_runs[0])}")
+        print(f"🔗 {label}: {_run_url(cb.traced_runs[0])}")
     except Exception:
         pass
+
+
+def _run_url(run):
+    # Client.get_run_url() builds a `/r/<run_id>?poll=true` link, which its own
+    # docstring says isn't meant for runtime use — LangSmith's v2 lookup for that
+    # route needs an exact project + start_time match and often 404s on a run
+    # that was just traced. The project-view "peek" link below is what the
+    # LangSmith UI itself generates when you open a run, and works reliably.
+    from langsmith import Client
+    from langsmith import utils as ls_utils
+
+    client = Client()
+    tenant_id = client._get_tenant_id()
+    session_id = getattr(run, "session_id", None)
+    if session_id is None:
+        session_id = client.read_project(project_name=ls_utils.get_tracer_project()).id
+
+    peek_start = run.start_time.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+    return (
+        f"https://smith.langchain.com/o/{tenant_id}/projects/p/{session_id}"
+        f"?peek={run.id}&peek_start={peek_start}&peek_project={session_id}"
+        f"&trace_id={run.trace_id}&run_id={run.id}&peeked_trace={run.trace_id}"
+    )
 
 
 def save_briefing(src="agent/briefing.md", dst="episode_briefing.md"):
