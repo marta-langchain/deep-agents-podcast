@@ -23,6 +23,11 @@ openai = ["langchain-openai>=1.2.1"]
 anthropic = ["langchain-anthropic>=1.4.1"]
 azure = ["azure-identity>=1.25.1"]
 bedrock = ["langchain-aws>=1.4.5"]
+test = ["pytest>=8.0.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.setuptools]
 packages = ["utils"]
