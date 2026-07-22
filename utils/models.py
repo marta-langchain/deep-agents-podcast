@@ -15,6 +15,8 @@ To swap providers, install the matching extra (see pyproject.toml), then comment
 out the Gemini block and uncomment one of the alternatives below.
 """
 
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.rate_limiters import InMemoryRateLimiter
 import os
 from pathlib import Path
 
@@ -30,14 +32,13 @@ load_dotenv(dotenv_path=_ENV_PATH, override=True)
 # (from .env) is the key that's used.
 os.environ.pop("GEMINI_API_KEY", None)
 
-from langchain_core.rate_limiters import InMemoryRateLimiter
-from langchain_google_genai import ChatGoogleGenerativeAI
 
 # A deep agent is bursty (planning + tool calls + subagent), and the free tier
 # is ~15 requests/min per project. One shared limiter across both models keeps
 # us under that ceiling so runs don't die on 429 RESOURCE_EXHAUSTED. Raise
 # requests_per_second if your project has a higher quota.
-_limiter = InMemoryRateLimiter(requests_per_second=0.2, check_every_n_seconds=0.1, max_bucket_size=3)
+_limiter = InMemoryRateLimiter(
+    requests_per_second=0.2, check_every_n_seconds=0.1, max_bucket_size=3)
 
 # ---- Default: Gemini (Google AI Studio, free tier) ------------------------
 # temperature=0 so reruns give you the same answer — no surprises while
@@ -45,8 +46,10 @@ _limiter = InMemoryRateLimiter(requests_per_second=0.2, check_every_n_seconds=0.
 # disable_streaming=True works around a bug where streamed responses can
 # drop tool-call data; this agent calls tools constantly, so streaming
 # stays off.
-model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest", temperature=0, disable_streaming=True, rate_limiter=_limiter)
-sub_agent_model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest", temperature=0, disable_streaming=True, rate_limiter=_limiter)
+model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest",
+                               temperature=0, disable_streaming=True, rate_limiter=_limiter)
+sub_agent_model = ChatGoogleGenerativeAI(
+    model="gemini-flash-lite-latest", temperature=0, disable_streaming=True, rate_limiter=_limiter)
 
 # For higher-quality steps, bump to the full flash tier (tighter free RPD):
 # model = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, rate_limiter=_limiter)

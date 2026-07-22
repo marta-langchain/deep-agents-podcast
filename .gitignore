@@ -176,8 +176,10 @@ vertexCred.json
 # Long-term memory (each user builds their own library)
 library_memory.db*
 
-# Generated podcast briefing (upload to NotebookLM)
+# Generated podcast briefing / audio
+output/
 episode_*_briefing.md
+episode_*_briefing.mp3
 agent/briefing.md
 
 # Secrets / credentials
