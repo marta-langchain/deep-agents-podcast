@@ -605,6 +605,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "arxiv" },
     { name = "deepagents" },
+    { name = "elevenlabs" },
     { name = "jupyterlab" },
     { name = "langchain" },
     { name = "langchain-google-genai" },
@@ -633,6 +634,7 @@ requires-dist = [
     { name = "arxiv", specifier = ">=2.1.0" },
     { name = "azure-identity", marker = "extra == 'azure'", specifier = ">=1.25.1" },
     { name = "deepagents", specifier = ">=0.5.3" },
+    { name = "elevenlabs", specifier = ">=2.0.0" },
     { name = "jupyterlab", specifier = ">=4.5.7" },
     { name = "langchain", specifier = ">=1.2.15" },
     { name = "langchain-anthropic", marker = "extra == 'anthropic'", specifier = ">=1.4.1" },
@@ -688,6 +690,23 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e0/4d/f332313098c1de1b2d2ff91cf2674415cc7cddab2ca1b01ae29774bd5fdf/docstring_parser-0.18.0.tar.gz", hash = "sha256:292510982205c12b1248696f44959db3cdd1740237a968ea1e2e7a900eeb2015", size = 29341, upload-time = "2026-04-14T04:09:19.867Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/5f/ed01f9a3cdffbd5a008556fc7b2a08ddb1cc6ace7effa7340604b1d16699/docstring_parser-0.18.0-py3-none-any.whl", hash = "sha256:b3fcbed555c47d8479be0796ef7e19c2670d428d72e96da63f3a40122860374b", size = 22484, upload-time = "2026-04-14T04:09:18.638Z" },
+]
+
+[[package]]
+name = "elevenlabs"
+version = "2.58.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "pydantic-core" },
+    { name = "requests" },
+    { name = "typing-extensions" },
+    { name = "websockets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c0/f1/ffb45244b83bd6a2df5c3903b9c045f77659c6a591ee88881770d10762a2/elevenlabs-2.58.0.tar.gz", hash = "sha256:3281f0f6271dd8a40466a2d7cdd4bc3721937109fc2917248e87dbde3b7832a7", size = 686610, upload-time = "2026-07-13T09:33:57.448Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9d/2e/761c8c625a8c67a1c027005f56ebd1b9f14e2f974aec0558e94c3e5bca5e/elevenlabs-2.58.0-py3-none-any.whl", hash = "sha256:e64417e585b8f88ff5ca95bb41e2723c1634cf0424b971b6b7283960de633808", size = 1849831, upload-time = "2026-07-13T09:33:55.62Z" },
 ]
 
 [[package]]

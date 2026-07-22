@@ -634,11 +634,18 @@ def _run_url(run):
     )
 
 
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / "output"
+
+
 def save_briefing(src="agent/briefing.md", dst="episode_briefing.md"):
-    """Copy the briefing the agent wrote (under agent/) to a file for NotebookLM."""
+    """Copy the briefing the agent wrote (under agent/) into ``output/``."""
     src = Path(src)
     if not src.exists():
         print(f"No briefing found at {src}.")
         return
-    Path(dst).write_text(src.read_text())
-    print(f"Saved {dst} ({src.stat().st_size} bytes) — upload to NotebookLM.")
+    dest = Path(dst)
+    if not dest.is_absolute():
+        dest = OUTPUT_DIR / dest.name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(src.read_text())
+    print(f"Saved {dest} ({src.stat().st_size} bytes) — upload to NotebookLM.")
